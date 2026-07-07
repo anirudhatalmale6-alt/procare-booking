@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Admin — ProCare</title>
+<meta name="robots" content="noindex" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/styles.css" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230f766e'/><text x='50' y='70' font-size='60' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'>P</text></svg>" />
+</head>
+<body>
+<div class="admin-shell">
+  <aside class="admin-side">
+    <div class="brand"><span class="logo">P</span> ProCare</div>
+    <nav class="admin-nav">
+      <a class="active" data-view="dash">📊 Dashboard</a>
+      <a data-view="bookings">📅 Bookings</a>
+      <a data-view="services">🛠️ Services (CMS)</a>
+      <a data-view="slots">⏰ Time slots</a>
+    </nav>
+    <div style="margin-top:30px;padding-top:20px;border-top:1px solid #1e293b">
+      <a href="index.html" style="color:#94a3b8;font-size:.88rem;display:block;padding:.5rem 0">← View site</a>
+      <a href="booking.html" style="color:#94a3b8;font-size:.88rem;display:block;padding:.5rem 0">→ Booking flow</a>
+      <a id="resetBtn" style="color:#f59e0b;font-size:.82rem;display:block;padding:.5rem 0;cursor:pointer">↺ Reset demo data</a>
+    </div>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <h2 id="viewTitle">Dashboard</h2>
+      <div style="display:flex;gap:10px;align-items:center">
+        <span class="muted" style="font-size:.85rem">Signed in as Admin</span>
+        <button class="btn btn-primary btn-sm" id="addServiceBtn" style="display:none">+ New service</button>
+      </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <section id="view-dash">
+      <div class="stat-row" id="statRow"></div>
+      <div class="table-card">
+        <div class="th"><b>Recent bookings</b><a href="#" data-view="bookings" class="btn btn-ghost btn-sm">View all</a></div>
+        <table><thead><tr><th>Ref</th><th>Service</th><th>Property</th><th>Date</th><th>Time</th><th>Status</th></tr></thead>
+        <tbody id="recentBody"></tbody></table>
+      </div>
+    </section>
+
+    <!-- BOOKINGS -->
+    <section id="view-bookings" style="display:none">
+      <div class="table-card">
+        <div class="th"><b>All bookings</b><span class="muted" style="font-size:.85rem" id="bkCount"></span></div>
+        <table><thead><tr><th>Ref</th><th>Service</th><th>Property</th><th>Type</th><th>Date</th><th>Time</th><th>Amount</th><th>Status</th><th></th></tr></thead>
+        <tbody id="bookingBody"></tbody></table>
+      </div>
+    </section>
+
+    <!-- SERVICES CMS -->
+    <section id="view-services" style="display:none">
+      <p class="muted" style="margin-bottom:18px;font-size:.92rem">Create and edit service pages, pricing and booking parameters. Changes reflect instantly on the live site.</p>
+      <div class="grid grid-3" id="svcAdminGrid"></div>
+    </section>
+
+    <!-- SLOTS -->
+    <section id="view-slots" style="display:none">
+      <div class="panel" style="max-width:560px">
+        <h3>Daily time slots</h3>
+        <p class="sub">These are the bookable start times offered each day. Applied across all services.</p>
+        <div id="slotEditor" style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:18px"></div>
+        <div class="field-row" style="align-items:end">
+          <div class="field" style="margin-bottom:0"><label>Add a slot (HH:MM)</label><input id="newSlot" placeholder="18:00" /></div>
+          <button class="btn btn-primary" id="addSlotBtn">Add slot</button>
+        </div>
+        <p class="muted" style="font-size:.82rem;margin-top:14px">Note: Sundays are closed by default (configurable). Each service also carries its own duration.</p>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- service edit modal -->
+<div class="modal-back" id="svcModal">
+  <div class="modal">
+    <h3 id="svcModalTitle">Edit service</h3>
+    <input type="hidden" id="mId" />
+    <div class="field"><label>Service name</label><input id="mName" /></div>
+    <div class="field-row">
+      <div class="field"><label>Category</label>
+        <select id="mCat"><option>Technical</option><option>Facilities</option></select></div>
+      <div class="field"><label>Icon (emoji)</label><input id="mIcon" maxlength="2" /></div>
+    </div>
+    <div class="field"><label>Description</label><textarea id="mBlurb" rows="2"></textarea></div>
+    <div class="field-row">
+      <div class="field"><label>Price ($)</label><input id="mPrice" type="number" /></div>
+      <div class="field"><label>Unit</label><input id="mUnit" placeholder="per visit" /></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Duration (min)</label><input id="mDur" type="number" /></div>
+      <div class="field"><label>Active</label>
+        <select id="mActive"><option value="true">Yes — visible</option><option value="false">No — hidden</option></select></div>
+    </div>
+    <div class="field"><label>Property types (available for)</label>
+      <div id="mProps" style="display:flex;gap:14px;flex-wrap:wrap;margin-top:6px"></div></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="mDelete" style="margin-right:auto;color:var(--danger);border-color:#f3d0d0">Delete</button>
+      <button class="btn btn-ghost" onclick="document.getElementById('svcModal').classList.remove('open')">Cancel</button>
+      <button class="btn btn-primary" id="mSave">Save changes</button>
+    </div>
+  </div>
+</div>
+
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  const views=["dash","bookings","services","slots"];
+  const titles={dash:"Dashboard",bookings:"Bookings",services:"Services (CMS)",slots:"Time slots"};
+
+  function switchView(v){
+    views.forEach(x=>document.getElementById("view-"+x).style.display = x===v?"block":"none");
+    document.querySelectorAll(".admin-nav a").forEach(a=>a.classList.toggle("active",a.dataset.view===v));
+    document.getElementById("viewTitle").textContent=titles[v];
+    document.getElementById("addServiceBtn").style.display = v==="services"?"inline-flex":"none";
+    if(v==="dash") renderDash();
+    if(v==="bookings") renderBookings();
+    if(v==="services") renderServices();
+    if(v==="slots") renderSlots();
+  }
+  document.querySelectorAll("[data-view]").forEach(a=>a.addEventListener("click",e=>{e.preventDefault();switchView(a.dataset.view);}));
+
+  function renderDash(){
+    const bk=PC.DB.bookings();
+    const revenue=bk.filter(b=>b.status!=="cancelled").reduce((s,b)=>s+(b.amount||0),0);
+    const holds=bk.filter(b=>b.status==="hold").length;
+    const stats=[
+      {lbl:"Total bookings",num:bk.length,d:"+"+bk.length},
+      {lbl:"Confirmed revenue",num:PC.money(revenue)},
+      {lbl:"On hold",num:holds},
+      {lbl:"Active services",num:PC.DB.services(true).length},
+    ];
+    document.getElementById("statRow").innerHTML=stats.map(s=>
+      `<div class="stat"><div class="lbl">${s.lbl}</div><div class="num">${s.num} ${s.d?`<small>${s.d}</small>`:""}</div></div>`).join("");
+    document.getElementById("recentBody").innerHTML=bk.slice(0,5).map(rowMini).join("");
+  }
+  function rowMini(b){
+    return `<tr><td><b>${b.id}</b></td><td>${b.serviceName}</td><td>${b.property}</td>
+      <td>${PC.fmtDate(b.date)}</td><td>${b.time}</td><td>${statusPill(b.status)}</td></tr>`;
+  }
+  function statusPill(s){
+    const map={confirmed:["ok","Confirmed"],hold:["hold","On hold"],done:["done","Completed"],cancelled:["hold","Cancelled"]};
+    const [c,l]=map[s]||["ok",s]; return `<span class="pill ${c}">${l}</span>`;
+  }
+
+  function renderBookings(){
+    const bk=PC.DB.bookings();
+    document.getElementById("bkCount").textContent=bk.length+" total";
+    document.getElementById("bookingBody").innerHTML=bk.map(b=>`
+      <tr><td><b>${b.id}</b></td><td>${b.serviceName}</td><td>${b.property}</td><td>${b.type}</td>
+      <td>${PC.fmtDate(b.date)}</td><td>${b.time}</td><td>${PC.money(b.amount)}</td>
+      <td>${statusPill(b.status)}</td>
+      <td>${b.status==="hold"?`<button class="btn btn-primary btn-sm" data-confirm="${b.id}">Confirm</button>`:""}</td></tr>`).join("");
+    document.querySelectorAll("[data-confirm]").forEach(btn=>btn.onclick=()=>{
+      PC.DB.setStatus(btn.dataset.confirm,"confirmed"); PC.toast("Booking confirmed"); renderBookings();
+    });
+  }
+
+  function renderServices(){
+    const grid=document.getElementById("svcAdminGrid");
+    grid.innerHTML="";
+    PC.DB.services(false).forEach(s=>{
+      const c=document.createElement("div");
+      c.className="card";
+      c.style.opacity=s.active?"1":".55";
+      c.innerHTML=`<div class="ic">${s.icon}</div>
+        <span class="tag">${s.cat}</span> ${s.active?"":'<span class="pill hold" style="margin-left:6px">Hidden</span>'}
+        <h3 style="margin-top:8px">${s.name}</h3>
+        <p>${s.blurb}</p>
+        <div class="meta"><span class="price">${PC.money(s.price)} <span>${s.unit}</span></span>
+        <button class="btn btn-ghost btn-sm" data-edit="${s.id}">Edit ✎</button></div>
+        <div class="muted" style="font-size:.78rem;margin-top:10px">Available: ${s.properties.join(", ")}</div>`;
+      grid.appendChild(c);
+    });
+    grid.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>openModal(b.dataset.edit));
+  }
+
+  // ---- service modal ----
+  const ALLPROPS=["Hotel","Resort","Residential","Commercial"];
+  function openModal(id){
+    const s=id?PC.DB.service(id):{id:"svc-"+Date.now(),name:"",cat:"Technical",icon:"🔧",blurb:"",price:150,unit:"per visit",duration:90,active:true,properties:["Hotel"]};
+    document.getElementById("svcModalTitle").textContent=id?"Edit service":"New service";
+    document.getElementById("mId").value=s.id;
+    document.getElementById("mName").value=s.name;
+    document.getElementById("mCat").value=s.cat;
+    document.getElementById("mIcon").value=s.icon;
+    document.getElementById("mBlurb").value=s.blurb;
+    document.getElementById("mPrice").value=s.price;
+    document.getElementById("mUnit").value=s.unit;
+    document.getElementById("mDur").value=s.duration;
+    document.getElementById("mActive").value=String(s.active);
+    document.getElementById("mProps").innerHTML=ALLPROPS.map(p=>
+      `<label style="font-weight:500;font-size:.9rem;display:flex;gap:.4rem;align-items:center">
+        <input type="checkbox" value="${p}" ${s.properties.includes(p)?"checked":""}/> ${p}</label>`).join("");
+    document.getElementById("mDelete").style.display=id?"inline-flex":"none";
+    document.getElementById("mDelete").onclick=()=>{ PC.DB.deleteService(s.id); document.getElementById("svcModal").classList.remove("open"); PC.toast("Service deleted"); renderServices(); };
+    document.getElementById("svcModal").classList.add("open");
+  }
+  document.getElementById("mSave").onclick=()=>{
+    const props=[...document.querySelectorAll("#mProps input:checked")].map(i=>i.value);
+    const svc={
+      id:document.getElementById("mId").value,
+      name:document.getElementById("mName").value.trim()||"Untitled service",
+      cat:document.getElementById("mCat").value,
+      icon:document.getElementById("mIcon").value||"🔧",
+      blurb:document.getElementById("mBlurb").value.trim(),
+      price:Number(document.getElementById("mPrice").value)||0,
+      unit:document.getElementById("mUnit").value.trim()||"per visit",
+      duration:Number(document.getElementById("mDur").value)||60,
+      active:document.getElementById("mActive").value==="true",
+      properties:props.length?props:["Hotel"],
+    };
+    PC.DB.saveService(svc);
+    document.getElementById("svcModal").classList.remove("open");
+    PC.toast("Service saved — live on site"); renderServices();
+  };
+  document.getElementById("addServiceBtn").onclick=()=>openModal(null);
+
+  function renderSlots(){
+    const ed=document.getElementById("slotEditor");
+    const slots=PC.DB.slotTemplate();
+    ed.innerHTML=slots.map(t=>`<span class="slot-chip" style="display:inline-flex;gap:.5rem;align-items:center;padding:.5rem .9rem;border:1px solid var(--line);border-radius:999px">
+      ${t} <b data-del="${t}" style="cursor:pointer;color:var(--danger)">×</b></span>`).join("");
+    ed.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{
+      const db=PC.DB.all(); db.slotTemplate=db.slotTemplate.filter(x=>x!==b.dataset.del);
+      localStorage.setItem("procare_v1",JSON.stringify(db)); PC.toast("Slot removed"); renderSlots();
+    });
+  }
+  document.getElementById("addSlotBtn").onclick=()=>{
+    const v=document.getElementById("newSlot").value.trim();
+    if(!/^\d{2}:\d{2}$/.test(v)){ PC.toast("Use HH:MM format, e.g. 18:00"); return; }
+    const db=PC.DB.all(); if(!db.slotTemplate.includes(v)){ db.slotTemplate.push(v); db.slotTemplate.sort(); }
+    localStorage.setItem("procare_v1",JSON.stringify(db));
+    document.getElementById("newSlot").value=""; PC.toast("Slot added"); renderSlots();
+  };
+
+  document.getElementById("resetBtn").onclick=()=>{ PC.DB.reset(); PC.toast("Demo data reset"); switchView("dash"); };
+
+  switchView("dash");
+})();
+</script>
+</body>
+</html>

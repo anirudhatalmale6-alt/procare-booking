@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Book a Service — ProCare</title>
+<meta name="description" content="Reserve a maintenance or facilities service. Real-time availability calendar with instant confirmation and no double-bookings." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/styles.css" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230f766e'/><text x='50' y='70' font-size='60' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'>P</text></svg>" />
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap nav">
+    <a class="brand" href="index.html"><span class="logo">P</span> ProCare</a>
+    <nav class="nav-links">
+      <a href="index.html#services">Services</a>
+      <a href="index.html#how">How it works</a>
+      <a href="index.html#features">Features</a>
+    </nav>
+    <div class="nav-cta">
+      <a href="admin.html" class="btn btn-ghost btn-sm">Admin</a>
+      <a href="index.html" class="btn btn-primary btn-sm">Home</a>
+    </div>
+    <button class="menu-btn" aria-label="Menu">☰</button>
+  </div>
+</header>
+
+<div class="page-head">
+  <div class="wrap">
+    <span class="eyebrow">Reservation</span>
+    <h1 style="margin-top:.4rem;font-size:2.2rem">Book a service</h1>
+    <p class="lead" style="margin-top:.6rem">Pick a service, choose an open slot on the real-time calendar, and confirm. Taken slots are blocked automatically.</p>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="booking">
+    <!-- LEFT: flow -->
+    <div>
+      <div class="stepper"><div class="s on" id="st1"></div><div class="s" id="st2"></div><div class="s" id="st3"></div></div>
+
+      <!-- Step 1: service -->
+      <div class="panel">
+        <h3>1 · Choose a service</h3>
+        <p class="sub">Availability, duration and pricing vary per service and property type.</p>
+        <div class="field">
+          <label>Property type</label>
+          <select id="propType">
+            <option>Hotel</option><option>Resort</option><option>Residential</option><option>Commercial</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Service</label>
+          <select id="serviceSel"></select>
+        </div>
+        <div id="svcInfo" class="muted" style="font-size:.9rem"></div>
+      </div>
+
+      <!-- Step 2: date + slot -->
+      <div class="panel">
+        <h3>2 · Pick date &amp; time</h3>
+        <p class="sub">Green dots mark days with open slots. Booked times are struck through and can't be selected.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:22px" class="cal-wrap-grid">
+          <div class="cal" id="cal"></div>
+          <div>
+            <label style="font-size:.85rem;font-weight:600;color:var(--ink-soft);display:block;margin-bottom:10px" id="slotLabel">Select a date to see times</label>
+            <div class="slots" id="slots"></div>
+          </div>
+        </div>
+        <div class="cal-legend">
+          <span><i class="dotm" style="background:var(--accent)"></i> Has availability</span>
+          <span><i class="dotm" style="background:#cbd5e1"></i> Full / past</span>
+        </div>
+      </div>
+
+      <!-- Step 3: details -->
+      <div class="panel">
+        <h3>3 · Your details</h3>
+        <p class="sub">Confirmation emails go to you and the ProCare team.</p>
+        <div class="field-row">
+          <div class="field"><label>Property / site name</label><input id="fProp" placeholder="e.g. Grand Marina Hotel" /></div>
+          <div class="field"><label>Contact name</label><input id="fName" placeholder="Your name" /></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>Email</label><input id="fEmail" type="email" placeholder="you@company.com" /></div>
+          <div class="field"><label>Phone (optional)</label><input id="fPhone" placeholder="+1 555 000 0000" /></div>
+        </div>
+        <div class="field"><label>Notes for the team (optional)</label><textarea id="fNotes" rows="3" placeholder="Access instructions, unit numbers, priority areas…"></textarea></div>
+      </div>
+    </div>
+
+    <!-- RIGHT: summary -->
+    <div>
+      <div class="panel summary" style="position:sticky;top:90px">
+        <h3>Booking summary</h3>
+        <p class="sub">Review before you confirm</p>
+        <div id="sumBody">
+          <div class="empty-note">Choose a service, date and time to see your summary.</div>
+        </div>
+        <button class="btn btn-primary btn-block" id="confirmBtn" style="margin-top:18px" disabled>Confirm booking</button>
+        <p class="muted" style="font-size:.78rem;text-align:center;margin-top:12px">🔒 Slot held on confirmation · no double-bookings</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- confirmation modal -->
+<div class="modal-back" id="confirmModal">
+  <div class="modal">
+    <div class="confirm-box">
+      <div class="check">✓</div>
+      <h3 style="margin-bottom:8px">Booking confirmed!</h3>
+      <p class="muted" id="confMsg"></p>
+      <div style="margin:18px 0"><span class="badge-inline" id="confId"></span></div>
+      <div style="text-align:left;background:var(--bg-soft);border-radius:12px;padding:16px;font-size:.9rem" id="confDetail"></div>
+      <p class="muted" style="font-size:.82rem;margin-top:16px">📧 A confirmation email has been sent to you and the ProCare team. (Emails are simulated in this demo.)</p>
+      <div class="modal-actions" style="justify-content:center">
+        <a href="index.html" class="btn btn-ghost">Back to home</a>
+        <button class="btn btn-primary" onclick="location.reload()">New booking</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="foot-bottom" style="border:0;padding-top:0">
+      <span>© 2026 ProCare. Demo build for client review.</span>
+      <span><a href="admin.html" style="color:#94a3b8">Admin panel →</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  const state = { serviceId:null, date:null, time:null };
+  const propSel=document.getElementById("propType");
+  const svcSel=document.getElementById("serviceSel");
+  const svcInfo=document.getElementById("svcInfo");
+  const calEl=document.getElementById("cal");
+  const slotsEl=document.getElementById("slots");
+  const slotLabel=document.getElementById("slotLabel");
+  const sumBody=document.getElementById("sumBody");
+  const confirmBtn=document.getElementById("confirmBtn");
+
+  let viewYear, viewMonth;
+  const today=new Date(); today.setHours(0,0,0,0);
+
+  // preselect service from URL
+  const params=new URLSearchParams(location.search);
+  const preselect=params.get("service");
+
+  function populateServices(){
+    const type=propSel.value;
+    const list=PC.DB.services(true).filter(s=>s.properties.includes(type));
+    svcSel.innerHTML="";
+    list.forEach(s=>{
+      const o=document.createElement("option");o.value=s.id;
+      o.textContent=`${s.name} — ${PC.money(s.price)} ${s.unit}`;
+      svcSel.appendChild(o);
+    });
+    if(preselect && list.some(s=>s.id===preselect)) svcSel.value=preselect;
+    onServiceChange();
+  }
+  function onServiceChange(){
+    state.serviceId=svcSel.value; state.time=null;
+    const s=PC.DB.service(state.serviceId);
+    svcInfo.textContent = s ? `⏱ ~${s.duration} min · ${s.cat} · ${PC.money(s.price)} ${s.unit}` : "";
+    renderCal(); renderSlots(); renderSummary();
+  }
+
+  function daysAvailable(y,m,d){
+    // a day has availability if it's today-or-future and not all slots taken
+    const iso=isoOf(y,m,d);
+    const dt=new Date(y,m,d); dt.setHours(0,0,0,0);
+    if(dt<today) return false;
+    if(dt.getDay()===0) return false; // closed Sundays (demo rule)
+    const taken=PC.DB.takenSlots(state.serviceId, iso);
+    return taken.length < PC.DB.slotTemplate().length;
+  }
+  function isoOf(y,m,d){ return `${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`; }
+
+  function renderCal(){
+    if(viewYear===undefined){ viewYear=today.getFullYear(); viewMonth=today.getMonth(); }
+    const first=new Date(viewYear,viewMonth,1);
+    const startDow=first.getDay();
+    const days=new Date(viewYear,viewMonth+1,0).getDate();
+    const monthName=first.toLocaleDateString(undefined,{month:"long",year:"numeric"});
+    let html=`<div class="cal-head"><b>${monthName}</b>
+      <div class="cal-nav"><button id="prevM">‹</button><button id="nextM">›</button></div></div>
+      <div class="cal-grid">`;
+    ["Su","Mo","Tu","We","Th","Fr","Sa"].forEach(d=>html+=`<div class="dow">${d}</div>`);
+    for(let i=0;i<startDow;i++) html+=`<div></div>`;
+    for(let d=1;d<=days;d++){
+      const iso=isoOf(viewYear,viewMonth,d);
+      const dt=new Date(viewYear,viewMonth,d); dt.setHours(0,0,0,0);
+      const avail=daysAvailable(viewYear,viewMonth,d);
+      let cls="cal-day";
+      if(dt.getTime()===today.getTime()) cls+=" today";
+      if(!avail) cls+=" disabled";
+      if(state.date===iso) cls+=" selected";
+      html+=`<div class="${cls}" data-iso="${iso}" ${avail?"":"aria-disabled=true"}>${d}${avail?'<span class="dot"></span>':''}</div>`;
+    }
+    html+=`</div>`;
+    calEl.innerHTML=html;
+    calEl.querySelector("#prevM").onclick=()=>{ if(viewYear===today.getFullYear()&&viewMonth<=today.getMonth())return; viewMonth--; if(viewMonth<0){viewMonth=11;viewYear--;} renderCal(); };
+    calEl.querySelector("#nextM").onclick=()=>{ viewMonth++; if(viewMonth>11){viewMonth=0;viewYear++;} renderCal(); };
+    calEl.querySelectorAll(".cal-day:not(.disabled)").forEach(el=>{
+      el.onclick=()=>{ state.date=el.dataset.iso; state.time=null; renderCal(); renderSlots(); renderSummary(); };
+    });
+  }
+
+  function renderSlots(){
+    if(!state.date){ slotsEl.innerHTML=""; slotLabel.textContent="Select a date to see times"; return; }
+    slotLabel.textContent="Times for "+PC.fmtDate(state.date);
+    const taken=PC.DB.takenSlots(state.serviceId, state.date);
+    slotsEl.innerHTML="";
+    PC.DB.slotTemplate().forEach(t=>{
+      const el=document.createElement("div");
+      const isTaken=taken.includes(t);
+      el.className="slot"+(isTaken?" taken":"")+(state.time===t?" selected":"");
+      el.innerHTML=`${t}<small>${isTaken?"Booked":"Open"}</small>`;
+      if(!isTaken) el.onclick=()=>{ state.time=t; renderSlots(); renderSummary(); };
+      slotsEl.appendChild(el);
+    });
+  }
+
+  function renderSummary(){
+    const s=PC.DB.service(state.serviceId);
+    const step2=!!state.date, step3=!!state.time;
+    document.getElementById("st2").classList.toggle("on", step2);
+    document.getElementById("st3").classList.toggle("on", step3);
+    if(!s){ return; }
+    if(!state.date || !state.time){
+      sumBody.innerHTML=`<div class="row"><span class="k">Service</span><span class="v">${s.name}</span></div>
+        <div class="row"><span class="k">Property type</span><span class="v">${propSel.value}</span></div>
+        <div class="empty-note">Pick a date and time to continue.</div>`;
+      confirmBtn.disabled=true; return;
+    }
+    sumBody.innerHTML=`
+      <div class="row"><span class="k">Service</span><span class="v">${s.name}</span></div>
+      <div class="row"><span class="k">Property type</span><span class="v">${propSel.value}</span></div>
+      <div class="row"><span class="k">Date</span><span class="v">${PC.fmtDate(state.date)}</span></div>
+      <div class="row"><span class="k">Time</span><span class="v">${state.time} · ~${s.duration}min</span></div>
+      <div class="total"><span>Estimate</span><span>${PC.money(s.price)}</span></div>`;
+    confirmBtn.disabled=false;
+  }
+
+  confirmBtn.onclick=()=>{
+    const s=PC.DB.service(state.serviceId);
+    const email=document.getElementById("fEmail").value.trim();
+    const name=document.getElementById("fName").value.trim();
+    const prop=document.getElementById("fProp").value.trim() || "Unnamed site";
+    if(!email || !name){ PC.toast("Please add your name and email");
+      document.getElementById("fName").focus(); return; }
+    const res=PC.DB.addBooking({
+      service:s.id, serviceName:s.name, date:state.date, time:state.time,
+      property:prop, type:propSel.value, contact:name, email:email,
+      phone:document.getElementById("fPhone").value.trim(),
+      notes:document.getElementById("fNotes").value.trim(),
+      status:"confirmed", amount:s.price
+    });
+    if(!res.ok){ PC.toast("That slot was just taken — please pick another"); renderSlots(); return; }
+    // show modal
+    document.getElementById("confMsg").textContent=`Thanks ${name}, your ${s.name} visit is reserved.`;
+    document.getElementById("confId").textContent="Ref: "+res.booking.id;
+    document.getElementById("confDetail").innerHTML=`
+      <b>${s.name}</b><br>${prop} · ${propSel.value}<br>
+      ${PC.fmtDate(state.date)} at ${state.time}<br>
+      <span style="color:var(--muted)">Estimate: ${PC.money(s.price)}</span>`;
+    document.getElementById("confirmModal").classList.add("open");
+  };
+
+  propSel.addEventListener("change", populateServices);
+  svcSel.addEventListener("change", onServiceChange);
+  populateServices();
+})();
+</script>
+</body>
+</html>

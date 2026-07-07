@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ProCare — Property Maintenance Booking for Managers</title>
+<meta name="description" content="Book maintenance and facilities management for hotels, resorts, residential and commercial properties in a few clicks. Real-time availability, instant confirmations, no double-bookings." />
+<meta name="keywords" content="property maintenance booking, facilities management, hotel maintenance, commercial property services, online booking calendar" />
+<meta property="og:title" content="ProCare — Property Maintenance Booking" />
+<meta property="og:description" content="Reserve maintenance & management services for any property type in a few clicks." />
+<meta property="og:type" content="website" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/styles.css" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230f766e'/><text x='50' y='70' font-size='60' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'>P</text></svg>" />
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap nav">
+    <a class="brand" href="index.html"><span class="logo">P</span> ProCare</a>
+    <nav class="nav-links">
+      <a href="#services">Services</a>
+      <a href="#how">How it works</a>
+      <a href="#properties">Property types</a>
+      <a href="#features">Features</a>
+    </nav>
+    <div class="nav-cta">
+      <a href="admin.html" class="btn btn-ghost btn-sm">Admin</a>
+      <a href="booking.html" class="btn btn-primary btn-sm">Book now</a>
+    </div>
+    <button class="menu-btn" aria-label="Menu">☰</button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">Maintenance &amp; management, on demand</span>
+      <h1 style="margin-top:14px">Book property maintenance in a few clicks.</h1>
+      <p class="lead">ProCare gives hotel, resort, residential and commercial managers one clean place to reserve maintenance and facilities services — with real-time availability and instant confirmation.</p>
+      <div class="hero-actions">
+        <a href="booking.html" class="btn btn-primary">Start a booking →</a>
+        <a href="#how" class="btn btn-ghost">See how it works</a>
+      </div>
+      <div class="hero-trust">
+        <div class="t"><b>&lt;3s</b><span>Page loads</span></div>
+        <div class="t"><b>24/7</b><span>Online booking</span></div>
+        <div class="t"><b>Zero</b><span>Double-bookings</span></div>
+      </div>
+    </div>
+
+    <!-- live booking preview card -->
+    <div class="hero-card reveal">
+      <div class="hc-head">
+        <div><b>HVAC &amp; Climate Systems</b><div class="muted" style="font-size:.82rem">Grand Marina Hotel</div></div>
+        <span class="badge">Available</span>
+      </div>
+      <div class="mini-cal" id="miniCal"></div>
+      <div class="slot-row">
+        <span class="slot-chip gone">08:00</span>
+        <span class="slot-chip sel">10:00</span>
+        <span class="slot-chip">12:00</span>
+        <span class="slot-chip">14:00</span>
+      </div>
+      <a href="booking.html" class="btn btn-primary btn-block" style="margin-top:16px">Confirm booking</a>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Services</span>
+      <h2 style="margin-top:.5rem">Everything your property needs, bookable online</h2>
+      <p class="lead">Each service has its own availability, duration and pricing — all editable from your admin panel. This is sample content you can replace.</p>
+    </div>
+    <div class="grid grid-3" id="serviceGrid"></div>
+    <div style="text-align:center;margin-top:32px" class="reveal">
+      <a href="booking.html" class="btn btn-primary">Browse &amp; book a service →</a>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how" class="band">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">How it works</span>
+      <h2 style="margin-top:.5rem">Three clicks from need to confirmed</h2>
+    </div>
+    <div class="steps">
+      <div class="step reveal"><div class="n">1</div><h3>Pick a service</h3><p>Choose from technical or facilities services tailored to your property type — HVAC, electrical, cleaning, grounds and more.</p></div>
+      <div class="step reveal"><div class="n">2</div><h3>Choose a slot</h3><p>The real-time calendar shows only what's genuinely open. Taken slots are blocked instantly, so double-bookings can't happen.</p></div>
+      <div class="step reveal"><div class="n">3</div><h3>Get confirmed</h3><p>Instant on-screen confirmation plus emails to you and our team. Held slots stay reserved until the visit is scheduled.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROPERTY TYPES -->
+<section id="properties">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Built for every portfolio</span>
+      <h2 style="margin-top:.5rem">One platform, every property type</h2>
+    </div>
+    <div class="ptypes">
+      <div class="ptype reveal"><div class="pi">🏨</div><b>Hotels &amp; Resorts</b><span>Guest-ready upkeep, rapid response and scheduled servicing that works around occupancy.</span></div>
+      <div class="ptype reveal"><div class="pi">🏢</div><b>Commercial</b><span>Offices, malls and mixed-use — compliance-driven maintenance with clear records.</span></div>
+      <div class="ptype reveal"><div class="pi">🏘️</div><b>Residential</b><span>High-rises and gated communities — resident-friendly scheduling and common-area care.</span></div>
+      <div class="ptype reveal"><div class="pi">🏬</div><b>Retail &amp; Malls</b><span>Foot-traffic-aware servicing that keeps shared spaces spotless and safe.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features" class="band">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Why ProCare</span>
+      <h2 style="margin-top:.5rem">Made to be fast, clear and future-proof</h2>
+    </div>
+    <div class="feat">
+      <div class="f reveal"><div class="fi">📅</div><h4>Real-time calendar</h4><p>Availability updates live and prevents double-booking across every property category.</p></div>
+      <div class="f reveal"><div class="fi">✉️</div><h4>Auto confirmations</h4><p>Every booking triggers confirmation emails to both the client and your team.</p></div>
+      <div class="f reveal"><div class="fi">🛠️</div><h4>Self-serve CMS</h4><p>Create and edit service pages, pricing and time slots from a simple admin panel.</p></div>
+      <div class="f reveal"><div class="fi">⭐</div><h4>Review-ready</h4><p>Architecture leaves room to layer in user reviews and ratings down the line.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section>
+  <div class="wrap">
+    <div class="cta reveal">
+      <h2>Ready to see it in action?</h2>
+      <p>Try the live booking flow below — pick a service, choose a slot on the real-time calendar, and watch it confirm.</p>
+      <a href="booking.html" class="btn btn-light">Try the booking flow →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="brand"><span class="logo">P</span> ProCare</div>
+        <p style="color:#94a3b8;font-size:.92rem;max-width:34ch">Maintenance &amp; property management, bookable online for managers of every property type.</p>
+      </div>
+      <div><h5>Services</h5><a href="#services">HVAC &amp; Climate</a><a href="#services">Electrical</a><a href="#services">Plumbing</a><a href="#services">Cleaning</a></div>
+      <div><h5>Company</h5><a href="#properties">Property types</a><a href="#how">How it works</a><a href="#features">Features</a><a href="admin.html">Admin panel</a></div>
+      <div><h5>Get started</h5><a href="booking.html">Book a service</a><a href="booking.html">Check availability</a></div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 ProCare. Demo build for client review.</span>
+      <span>Modern minimalist · Responsive · SEO-ready</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/app.js"></script>
+<script>
+  // mini calendar in hero
+  (function(){
+    const el = document.getElementById("miniCal");
+    const dows=["S","M","T","W","T","F","S"];
+    dows.forEach(d=>{const s=document.createElement("span");s.textContent=d;el.appendChild(s);});
+    const on=[12,17,22], off=[1,2];
+    for(let i=1;i<=28;i++){
+      const b=document.createElement("b");b.textContent=i;
+      if(on.includes(i))b.classList.add("on");
+      if(off.includes(i))b.classList.add("off");
+      el.appendChild(b);
+    }
+  })();
+  // render services from shared data
+  (function(){
+    const grid=document.getElementById("serviceGrid");
+    PC.DB.services(true).slice(0,6).forEach(s=>{
+      const c=document.createElement("a");
+      c.className="card reveal"; c.href="booking.html?service="+s.id;
+      c.innerHTML=`<div class="ic">${s.icon}</div>
+        <span class="tag">${s.cat}</span>
+        <h3>${s.name}</h3>
+        <p>${s.blurb}</p>
+        <div class="meta"><span class="price">${PC.money(s.price)} <span>${s.unit}</span></span>
+        <span class="btn btn-ghost btn-sm">Book →</span></div>`;
+      grid.appendChild(c);
+    });
+    PC.initReveal();
+  })();
+</script>
+</body>
+</html>
